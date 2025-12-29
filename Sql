@@ -1,0 +1,92 @@
+
+ #  PAYROLL ANALYTICS – SQL QUERIES
+
+
+/* 1. Preview Data */
+SELECT * 
+FROM payrolldata
+LIMIT 10;
+
+/* 2. Monthly Payroll Cost */
+SELECT
+    DATE_FORMAT(pay_date, '%Y-%m') AS payroll_month,
+    SUM(base_salary + overtime_pay) AS total_payroll_cost
+FROM payrolldata
+GROUP BY payroll_month
+ORDER BY payroll_month;
+
+/* 3. Department-wise Salary Distribution */
+SELECT
+    department,
+    SUM(base_salary) AS department_salary_cost
+FROM payrolldata
+GROUP BY department
+ORDER BY department_salary_cost DESC;
+
+/* 4. Total Overtime Hours */
+SELECT
+    SUM(overtime_hours) AS total_overtime_hours
+FROM payrolldata;
+
+/* 5. Monthly Overtime Trend */
+SELECT
+    DATE_FORMAT(pay_date, '%Y-%m') AS payroll_month,
+    SUM(overtime_hours) AS overtime_hours
+FROM payrolldata
+GROUP BY payroll_month
+ORDER BY payroll_month;
+
+/* 6. Total Overtime Pay */
+SELECT
+    SUM(overtime_pay) AS total_overtime_pay
+FROM payrolldata;
+
+/* 7. Average Leave Days (Overall) */
+SELECT
+    AVG(leave_days) AS average_leave_days
+FROM payrolldata;
+
+/* 8. Average Leave Days by Department */
+SELECT
+    department,
+    AVG(leave_days) AS avg_leave_days
+FROM payrolldata
+GROUP BY department
+ORDER BY avg_leave_days DESC;
+
+/* 9. Payroll Summary by Department */
+SELECT
+    department,
+    COUNT(employee_id) AS employee_count,
+    SUM(base_salary) AS total_base_salary,
+    SUM(overtime_pay) AS total_overtime_pay,
+    SUM(base_salary + overtime_pay) AS total_payroll_cost
+FROM payrolldata
+GROUP BY department
+ORDER BY total_payroll_cost DESC;
+
+/* 10. Top 5 Employees by Overtime Pay */
+SELECT
+    employee_id,
+    employee_name,
+    department,
+    overtime_pay
+FROM payrolldata
+ORDER BY overtime_pay DESC
+LIMIT 5;
+
+/* 11. Payroll Cost by Job Title */
+SELECT
+    job_title,
+    SUM(base_salary + overtime_pay) AS payroll_cost
+FROM payrolldata
+GROUP BY job_title
+ORDER BY payroll_cost DESC;
+
+/* 12. Yearly Payroll Summary */
+SELECT
+    YEAR(pay_date) AS payroll_year,
+    SUM(base_salary + overtime_pay) AS yearly_payroll_cost
+FROM payrolldata
+GROUP BY payroll_year
+ORDER BY payroll_year;
